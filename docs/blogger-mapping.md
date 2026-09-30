@@ -42,8 +42,10 @@ Se uma classe mudar em `src/`, a mesma alteração tem de ser aplicada em
   hierarquia partir do `h1` da `page-header`).
 - Imagens usam `resizeImage(post, w, "16:9")` em vez de ficheiros locais.
 - Anúncios e links legais são widgets manuais, não HTML fixo.
-- JSON-LD do artigo está em `src/article.html`; o tema não o inclui ainda
-  (candidato a widget HTML + `data:post` na FASE 2).
+- **JSON-LD**: em `src/` é estático (demo); no tema é dinâmico — `WebSite`,
+  `CollectionPage`/`WebPage`, `Article` e `BreadcrumbList` vêm de `data:*`
+  (`.jsonEscaped`), e `FAQPage` é construída no cliente a partir das
+  `<details>` visíveis do corpo do artigo. Ver `blogger/README.md`.
 
 ## Ficheiros de referência
 

@@ -68,7 +68,9 @@ Sem dependências; progressive enhancement — as páginas funcionam sem JS.
 - `meta description`, canonical, Open Graph/Twitter e JSON-LD (Article,
   Breadcrumb, FAQPage) sobre `https://valorfacil.blogspot.com/` — os
   caminhos (`/article.html`, `/category.html`) são os do preview local e
-  passam a permalinks reais no deploy.
+  passam a permalinks reais no deploy. No preview o JSON-LD é estático;
+  em `blogger/theme.xml` é gerado a partir de `data:*` (ver
+  `blogger/README.md`).
 - Landmarks: `header`/`nav`/`main`/`aside`/`footer`, skip-link, foco visível.
 - Alvos ≥ 44px (`--target-min`), contraste AA verificado com axe-core.
 
@@ -82,6 +84,7 @@ python3 -m http.server 8080 --bind 127.0.0.1   # workdir src/
 node test.js                                    # responsividade + interações + axe
 node axe-detail.js                              # detalhe de violações
 node shots.js                                    # screenshots em shots/
+python3 structure.py                             # estrutura do theme.xml + JSON-LD
 ```
 
 Cobertura: 5 páginas × 10 larguras (360→1920), overflow horizontal, imagens,

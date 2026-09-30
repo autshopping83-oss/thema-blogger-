@@ -37,6 +37,27 @@
     <meta expr:content='data:blog.postImageUrl' name='twitter:image'/>
   </b:if>
 
+  <!-- ============ JSON-LD (dados reais do Blogger, nunca fixos) ============ -->
+
+  <!-- Homepage: WebSite + SearchAction -->
+  <b:if cond='data:view.isHomepage'>
+    <script type='application/ld+json'>{"@context":"https://schema.org","@type":"WebSite","name":"<data:blog.title.jsonEscaped/>","url":"<data:blog.canonicalHomepageUrl/>","potentialAction":{"@type":"SearchAction","target":"<data:blog.canonicalHomepageUrl/>search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+  </b:if>
+
+  <!-- Categoria / arquivo / pesquisa: CollectionPage + BreadcrumbList -->
+  <b:if cond='data:view.isMultipleItems and not data:view.isHomepage'>
+    <script type='application/ld+json'>{"@context":"https://schema.org","@type":"CollectionPage","name":"<data:view.title.jsonEscaped/>","url":"<data:blog.canonicalUrl.jsonEscaped/>","isPartOf":{"@type":"WebSite","name":"<data:blog.title.jsonEscaped/>","url":"<data:blog.canonicalHomepageUrl/>"}}</script>
+    <script type='application/ld+json'>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"<data:blog.canonicalHomepageUrl/>"},{"@type":"ListItem","position":2,"name":"<data:view.title.jsonEscaped/>","item":"<data:blog.canonicalUrl.jsonEscaped/>"}]}</script>
+  </b:if>
+
+  <!-- Página estática: WebPage + BreadcrumbList -->
+  <b:if cond='data:view.isPage'>
+    <script type='application/ld+json'>{"@context":"https://schema.org","@type":"WebPage","name":"<data:view.title.jsonEscaped/>","url":"<data:blog.canonicalUrl.jsonEscaped/>","isPartOf":{"@type":"WebSite","name":"<data:blog.title.jsonEscaped/>","url":"<data:blog.canonicalHomepageUrl/>"}}</script>
+    <script type='application/ld+json'>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"<data:blog.canonicalHomepageUrl/>"},{"@type":"ListItem","position":2,"name":"<data:view.title.jsonEscaped/>","item":"<data:blog.canonicalUrl.jsonEscaped/>"}]}</script>
+  </b:if>
+
+  <!-- Artigo: Article + BreadcrumbList são emitidos no Blog1 (vê abaixo). -->
+
   <!-- ==========================================================
        DESIGN SYSTEM — espelho de src/css/*.css (versão Blogger)
        Mantido em Git em theme/ e sincronizado manualmente.
@@ -575,6 +596,31 @@ section.section{padding-block:var(--space-section)}
                 <a expr:href='data:label.url'><data:label.name/></a>
               </b:loop>
             </p>
+
+            <!-- JSON-LD do artigo — só para posts reais, com dados do post -->
+            <b:if cond='data:view.isPost'>
+              <script type='application/ld+json'>
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "<data:post.url.canonical.jsonEscaped/>"},
+  "headline": "<data:post.title.jsonEscaped/>",
+  "description": "<data:post.snippets.short.jsonEscaped/>",
+  "datePublished": "<data:post.date.iso8601.jsonEscaped/>",
+  "dateModified": "<data:post.lastUpdated.iso8601.jsonEscaped/>",
+  "author": {"@type": "Person", "name": "<data:post.author.name.jsonEscaped/>", "url": "<data:post.author.profileUrl.jsonEscaped/>"},
+  "publisher": {"@type": "Organization", "name": "<data:blog.title.jsonEscaped/>"}<b:if cond='data:post.featuredImage'>,
+  "image": {"@type": "ImageObject", "url": "<b:eval expr='resizeImage(data:post.featuredImage, 1200, &quot;1200:630&quot;)'/>", "width": 1200, "height": 630}</b:if>
+}
+              </script>
+              <script type='application/ld+json'>
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Início", "item": "<data:blog.homepageUrl/>"}
+  <b:loop index='i' values='data:post.labels' var='label'><b:if cond='data:i == 0'>,{"@type": "ListItem", "position": 2, "name": "<data:label.name.jsonEscaped/>", "item": "<data:label.url.jsonEscaped/>"}</b:if></b:loop>
+  ,{"@type": "ListItem", "position": <b:if cond='data:post.labels'>3<b:else/>2</b:if>, "name": "<data:post.title.jsonEscaped/>", "item": "<data:post.url.canonical.jsonEscaped/>"}
+]}
+              </script>
+            </b:if>
           </b:if>
         </b:includable>
 
@@ -755,6 +801,33 @@ section.section{padding-block:var(--space-section)}
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
+})();
+
+// FAQPage — emitida só se o artigo tiver mesmo perguntas visíveis no corpo.
+// Lê as <details> do post (marcadas no editor HTML do Blogger) e constrói o
+// JSON-LD com o texto real da página; sem FAQ, não há script.
+(function () {
+  var body = document.querySelector('.article-body');
+  if (!body) return;
+  var nodes = body.querySelectorAll('details');
+  var items = [];
+  for (var i = 0; i < nodes.length; i++) {
+    var det = nodes[i];
+    var sum = det.querySelector('summary');
+    if (!sum || sum.getClientRects().length === 0) continue;
+    var name = (sum.textContent || '').trim();
+    var ans = det.querySelector('.faq-answer') || det;
+    var text = (ans.textContent || '').replace(name, '').trim();
+    if (!name || !text) continue;
+    items.push({ '@type': 'Question', name: name,
+      acceptedAnswer: { '@type': 'Answer', text: text } });
+  }
+  if (!items.length) return;
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({ '@context': 'https://schema.org',
+    '@type': 'FAQPage', mainEntity: items });
+  document.head.appendChild(s);
 })();
 //]]></script>
 </body>

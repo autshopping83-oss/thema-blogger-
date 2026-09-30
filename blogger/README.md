@@ -59,6 +59,9 @@ python3 /data/data/com.termux/files/usr/tmp/opencode/fvtest/structure.py
       escolher o post ou manter `useMostRecentPost=true`).
 - [ ] O slot `ad-after-featured` aparece entre o hero e "Publicações recentes"
       na homepage e **não** aparece em categoria/artigo.
+- [ ] Rich Results Test: `WebSite` na home, `CollectionPage`+`BreadcrumbList`
+      em categoria, `Article`+`BreadcrumbList` num post, `FAQPage` só em
+      artigos com `<details>` visíveis.
 - [ ] Menu do `PageList` preenche o `nav-list` (criar as páginas em Blogger → Páginas).
 - [ ] `Header1` mostra título (logo opcional via widget).
 - [ ] Slots de anúncio vazios (HTML widgets) não partem o layout.
@@ -67,6 +70,33 @@ python3 /data/data/com.termux/files/usr/tmp/opencode/fvtest/structure.py
 - [ ] Tema mobile (`?m=1`) e desktop (`?m=0`), 360/768/1280/1920.
 - [ ] Drawer: `aria-expanded`, Escape, foco preso, sem scroll de fundo.
 - [ ] Lighthouse: acessibilidade ≥ 95, sem violações axe.
+
+## JSON-LD (dados estruturados)
+
+Tudo dinâmico, a partir de `data:*` do próprio Blogger — nenhum valor fixo:
+
+| Página | `@type` emitido | Origem dos dados |
+|--------|-----------------|------------------|
+| Homepage | `WebSite` + `SearchAction` | `data:blog.title`, `data:blog.homepageUrl` |
+| Categoria/arquivo/pesquisa | `CollectionPage` + `BreadcrumbList` | `data:view.title`, `data:blog.canonicalUrl` |
+| Página estática | `WebPage` + `BreadcrumbList` | `data:view.title` |
+| Artigo (`data:view.isPost`) | `Article` + `BreadcrumbList` | `data:post.title`, `.snippets.short`, `.date.iso8601`, `.lastUpdated.iso8601`, `.author`, `.labels` |
+| Artigo com FAQ visível | `FAQPage` | lido do DOM pelo script do tema |
+
+- `FAQPage` **nunca** é emitida como bloco fixo: o script varre
+  `details` dentro de `.article-body` e só cria o JSON-LD se encontrar
+  perguntas visíveis (pergunta = `<summary>`, resposta = `.faq-answer`).
+- Convenção de conteúdo no editor HTML do Blogger:
+
+```html
+<details class="faq-item">
+  <summary>Pergunta?</summary>
+  <div class="faq-answer"><p>Resposta.</p></div>
+</details>
+```
+
+- Strings escapadas com `.jsonEscaped` (títulos, URLs, resumos) para o JSON
+  não partir com aspas ou acentos.
 
 ## Notas técnicas
 
