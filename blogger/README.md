@@ -66,7 +66,7 @@ python3 tools/validate-theme.py
 - [ ] `Header1` mostra título (logo opcional via widget).
 - [ ] Slots de anúncio vazios (HTML widgets) não partem o layout.
 - [ ] Labels existem em **Rótulos** e aparecem no `Label1`.
-- [ ] URLs relativas (`search`, `archive`, `p/...`) resolvem para `https://valorfacil.blogspot.com/`.
+- [ ] URLs relativas (`search`, `p/...`) resolvem para `https://valorfacil.blogspot.com/` (o link `archive` foi removido: `/archive` não existe no Blogger).
 - [ ] Tema mobile (`?m=1`) e desktop (`?m=0`), 360/768/1280/1920.
 - [ ] Drawer: `aria-expanded`, Escape, foco preso, sem scroll de fundo.
 - [ ] Lighthouse: acessibilidade ≥ 95, sem violações axe.
