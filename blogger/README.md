@@ -50,7 +50,7 @@ widget**, que é seguro para o Blogger.
 Verificação automática:
 
 ```bash
-python3 /data/data/com.termux/files/usr/tmp/opencode/fvtest/structure.py
+python3 tools/validate-theme.py
 ```
 
 ## Verificar após importar
