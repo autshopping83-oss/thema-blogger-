@@ -194,37 +194,68 @@ antes 12):
 | Screenshots antes/depois (home, artigo, categoria, 360/1440) | ✅ **6/6 byte a byte idênticos** |
 | Sidebar em widgets nativos | ✅ `sidebar-rule.test.js`: 5 widgets, `display:none` sem `main-layout`, `flex` com ele (`preview/sidebar-sem-layout.png`) |
 
-## 8. Checklist pré-instalação (gate)
+## 8. Checklist pré-instalação (gate) — executado
 
-- [ ] `tools/validate-theme.py` → **0 erros** e avisos §7 resolvidos ou aceites.
-- [ ] XML válido (`ElementTree`) e `node --check` do JS inline.
-- [ ] `node test.js` verde e capturas sem regressões.
-- [ ] `blogger/README.md` com o checklist de verificação pós-import atualizado.
-- [ ] **Backup do tema atual** em `valorfacil.blogspot.com` (Blogger → Tema → ⋮ → Backup) — guardado localmente.
-- [ ] Plano de rollback definido: reverter para o backup em <2 min.
-- [ ] Decidido se a instalação é feita por si (manual) ou pelo agente (requer FASE 3/MCP).
+- [x] `tools/validate-theme.py` → **0 erros** e avisos §7 resolvidos ou aceites.
+- [x] XML válido (`ElementTree`) e JS inline com sintaxe válida (o validador
+      confirma os dois).
+- [x] `node test.js` verde e capturas sem regressões (`preview/before/`).
+- [x] `blogger/README.md` com o checklist de verificação pós-import atualizado.
+- [x] Plano de rollback documentado: reverter para o backup em <2 min
+      (`INSTRUCOES.txt` + §9).
+- [x] Instalação decidida como **manual** (utilizador), sem agente/MCP.
+- [~] **Backup do tema atual** antes do upload: efetuado pelo utilizador no
+      Blogger; execução não verificável pelo agente — confirmar que o `.xml`
+      de backup está guardado localmente.
 
-## 9. Plano de instalação (só depois do gate de §8)
+## 9. Instalação e verificação real (pós-upload)
 
-Princípios: **tema de backup primeiro, cópia de teste, zero conteúdo novo.**
+Princípios seguidos: **tema de backup primeiro, cópia de teste, zero conteúdo
+novo.** Instalação manual feita pelo utilizador em
+`valorfacil.blogspot.com` (Blogger → Tema → Restaurar); o agente não tocou
+no Blogger em nenhum momento.
 
-1. Backup do tema atual do blog (ficheiro `.xml`) + cópia local em `preview/backup/`.
-2. Upload de `blogger/theme.xml` (Blogger → Tema → ← Voltar/Restaurar).
-3. Se o editor rejeitar: ler a mensagem (§5 dá a hipótese mais provável —
-   `widget-settings` ou id com hífen), corrigir, repetir. **Nunca** submeter
-   por cima sem backup.
-4. Verificar **sem publicar nada**: Layout (8 secções/widgets visíveis),
-   home/categoria/artigo/pesquisa em `?m=1` e `?m=0` (360/768/1280/1920),
-   drawer, busca, paginação, `FeaturedPost1`, slot `ad-after-featured`,
-   breadcrumb, Rich Results Test (WebSite/CollectionPage/Article/FAQPage),
-   axe-core no site real.
-5. Registar resultados em `docs/theme-audit.md` (secção "verificação real").
-6. Rollback imediato para o backup em qualquer falha.
-7. Só depois: FASE 2b (conteúdo/`blogId`) e FASE 3 (OAuth + MCP).
+1. Backup do tema anterior no Blogger (utilizador) + entrega do tema em
+   `/storage/emulated/0/Download/blogger/theme-valorfacil.xml`.
+2. Upload de `blogger/theme.xml` (commit `af9b0e9`, md5 `b7d36199…`).
+3. Primeira submissão teve erro de formatação **do ficheiro ao copiar**
+   (não do tema); reposicionado e aceite.
+4. Verificação **só de leitura** (GET público + chromium headless,
+   puppeteer-core; sem Blogger API/OAuth/MCP, sem publicar nada).
+5. Resultados registados em §9.1.
+6. Rollback disponível: Restaurar → backup do passo 1.
+
+### 9.1 Verificação real do tema instalado (marco, 2026-09-30)
+
+Tema no ar: commit `af9b0e9` (main = development).
+
+| Verificação | Resultado |
+|---|---|
+| `<html lang='pt-PT'>` | ✅ confirmado no HTML servido |
+| axe — home | 1 violação: `page-has-heading-one` — **sem posts não há `<h1>`** (o `h1` é o título do destaque). Não é bug do tema: repetir o teste quando houver conteúdo; **não** introduzir `h1` artificial numa home vazia |
+| axe — etiqueta (`/search/label/…`) | ✅ **0 violações** |
+| Rodapé "Navegar" | `Início` → 200, `Pesquisa` → 200; item `Arquivo` **removido** (`/archive` não existe no Blogger) |
+| Pedidos falhados (rede) | ✅ **0** |
+| Erros de consola/JS | ✅ **0** |
+| Drawer mobile | ✅ `.menu-toggle` → `aria-expanded=true`, backdrop, painel off-canvas |
+| Sidebar | home: `display:none`, 0px; etiqueta e arquivo mensal: `flex`, 300px — 5 widgets nativos sempre no DOM |
+| Secções | `site-branding, nav, ad-top, featured, ad-after-featured, main, sidebar, footer-widgets` |
+| canonical / JSON-LD | home `WebSite`; etiqueta/mês `CollectionPage`+`BreadcrumbList`; `og:url` = URL canónica em cada página |
+| 404 `/p/sobre.html`, `/p/privacidade.html`, `/p/termos.html` | **conteúdo pendente (FASE 2b)** — páginas institucionais por criar; não é bug do tema. Tratar **antes** de qualquer publicação definitiva |
+| Sem posts | destaque/recentes vazios por desenho — FASE 2b |
+
+Ordem decidida para a frente: **tema (feito) → páginas institucionais →
+menu → conteúdo inicial → SEO → monetização.**
+
 
 ## 10. Estado
 
 - FASE 1: **concluída** (frontend + tema, testes e docs versionados).
-- FASE 2 (esta): auditoria **concluída**; correções §7.1–§7.4 **aplicadas e
-  verificadas**; instalação **não executada** (falta o gate de §8).
-- Conta Blogger, MCP e OAuth: **intocados**.
+- FASE 2: auditoria **concluída**; correções §7.1–§7.4 aplicadas; tema
+  **instalado manualmente** pelo utilizador e **verificado ao vivo** (§9.1,
+  commit `af9b0e9`) — gate de §8 concluído, com a ressalva do backup (§8).
+- FASE 2b (pendente): páginas institucionais `/p/sobre`, `/p/privacidade`,
+  `/p/termos` (404), ligação ao menu/footer, conteúdo inicial, SEO.
+- FASE 3 (pendente): OAuth + MCP.
+- Conta Blogger, MCP e OAuth: **intocados pelo agente** (instalação e
+  conteúdo são manuais, do utilizador).
