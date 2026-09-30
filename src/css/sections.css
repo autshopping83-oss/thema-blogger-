@@ -1,0 +1,146 @@
+/* Secções da homepage: split de categoria, newsletter, paginação, estados. */
+
+/* Divisão principal + secundária (60/40 no desktop, 1 coluna no mobile) --- */
+.category-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
+}
+
+.split-secondary {
+  display: flex;
+  flex-direction: column;
+}
+
+.split-secondary .card--row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.split-secondary .card--row:first-child {
+  padding-top: 0;
+}
+
+/* Lista vertical de artigos (sidebar / secundária) ------------------------ */
+.post-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.post-list-item:last-child {
+  border-bottom: 0;
+}
+
+.post-list-title {
+  font-size: calc(var(--text-card-title) - 1px);
+  line-height: 1.35;
+  font-weight: var(--weight-semibold);
+}
+
+.post-list-title a {
+  color: var(--color-text);
+}
+
+.post-list-title a:hover {
+  color: var(--color-primary);
+}
+
+/* Newsletter -------------------------------------------------------------- */
+.newsletter {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.newsletter-title {
+  font-size: var(--text-h3);
+}
+
+.newsletter-text {
+  margin-top: var(--space-xs);
+  font-size: var(--text-card-summary);
+  color: var(--color-text-secondary);
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.newsletter-form .field {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.newsletter-note {
+  font-size: var(--text-meta);
+  color: var(--color-text-secondary);
+}
+
+.newsletter-note.is-success {
+  color: var(--color-success);
+  font-weight: var(--weight-semibold);
+}
+
+.newsletter-note.is-error {
+  color: var(--color-danger);
+  font-weight: var(--weight-semibold);
+}
+
+/* Paginação --------------------------------------------------------------- */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
+
+.pagination a,
+.pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+
+.pagination a:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pagination [aria-current="page"] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+/* Estado vazio (pesquisa) ------------------------------------------------- */
+.empty-state {
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--color-text-secondary);
+}

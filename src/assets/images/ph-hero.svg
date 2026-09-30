@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Destaque">
+  <defs>
+    <linearGradient id="g-ph-hero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#g-ph-hero)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2">
+    <path d="M0 300 L120 250 L240 275 L360 190 L480 215 L640 120"/>
+    <circle cx="360" cy="190" r="6" fill="#FFFFFF" stroke="none"/>
+    <circle cx="640" cy="120" r="6" fill="#FFFFFF" stroke="none"/>
+  </g>
+  <text x="32" y="320" fill="#FFFFFF" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700">Destaque</text>
+  <text x="32" y="344" fill="#FFFFFF" fill-opacity="0.75" font-family="Helvetica, Arial, sans-serif" font-size="14">Imagem de demonstracao (16:9)</text>
+</svg>
