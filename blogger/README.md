@@ -22,8 +22,9 @@ Desenvolvido em Git; aplicado manualmente no Blogger.
 | Cabeçalho | `site-branding` → `Header1` | logo/título + link para home |
 | Navegação | `nav` → `PageList1` | menu principal (páginas) |
 | Anúncio topo | `ad-top` → `HTML10` | slot `ad-slot` acessível |
-| Conteúdo | `main` → `Blog1` | hero, cards, categoria, post, breadcrumb, paginação |
-| Anúncio | `ad-after-featured` → `HTML11` | entre hero e recentes (homepage) |
+| Destaque/hero | `featured` → `FeaturedPost1` | hero da homepage (post mais recente) |
+| Anúncio | `ad-after-featured` → `HTML11` | entre hero e recentes (só homepage) |
+| Conteúdo | `main` → `Blog1` | recentes, categoria, post, breadcrumb, paginação |
 | Barra lateral | `sidebar` | `BlogSearch1`, `PopularPosts1`, `Label1`, `HTML20`, `HTML21` |
 | Rodapé | `footer-widgets` → `HTML30` | links extra legais/categorias |
 | Rodapé | estático | colunas, disclaimer, copyright |
@@ -31,13 +32,33 @@ Desenvolvido em Git; aplicado manualmente no Blogger.
 
 ## Renderização condicional (`Blog1`)
 
-- `isMultipleItems && isHomepage` → hero (1º post) + grelha de recentes (`i > 0`).
+- `isMultipleItems && isHomepage` → grelha de recentes (`i > 0`, o 1º post é o
+  destaque).
 - `isMultipleItems && !isHomepage` → `page-header` + cards de categoria/arquivo/pesquisa.
 - `!isMultipleItems` → post individual (breadcrumb, corpo, rótulos).
 - Sempre: `pagination` (`newerPageUrl` / `olderPageUrl`).
 
+Ordem das secções dentro de `<main>`: `featured` → `ad-after-featured` → `main`.
+
+## Secções: regra estrutural
+
+Todas as `<b:section>` são filhas diretas de um elemento normal (`div`/`main`/
+`aside`) — **nunca** dentro de `<b:widget>`, `<b:if>` ou `<b:loop>`. O
+conteúdo condicional (só homepage) é aplicado **dentro do `b:includable` do
+widget**, que é seguro para o Blogger.
+
+Verificação automática:
+
+```bash
+python3 /data/data/com.termux/files/usr/tmp/opencode/fvtest/structure.py
+```
+
 ## Verificar após importar
 
+- [ ] `FeaturedPost1` mostra o post mais recente (se vier vazio, em **Layout**
+      escolher o post ou manter `useMostRecentPost=true`).
+- [ ] O slot `ad-after-featured` aparece entre o hero e "Publicações recentes"
+      na homepage e **não** aparece em categoria/artigo.
 - [ ] Menu do `PageList` preenche o `nav-list` (criar as páginas em Blogger → Páginas).
 - [ ] `Header1` mostra título (logo opcional via widget).
 - [ ] Slots de anúncio vazios (HTML widgets) não partem o layout.
@@ -49,9 +70,11 @@ Desenvolvido em Git; aplicado manualmente no Blogger.
 
 ## Notas técnicas
 
-- IDs `HTML10/HTML11/HTML20/HTML21/HTML30` são estáveis — não renomear.
-- `b:section` de anúncios vive dentro de `b:if` (homepage). Se o Blogger
-  rejeitar, mover a seção para fora do condicional e esconder com CSS.
+- IDs `HTML10/HTML11/HTML20/HTML21/HTML30` e `FeaturedPost1` são estáveis —
+  não renomear.
+- O Blogger envolve cada secção num `<div class="... section">`; por isso o
+  espaçamento de secções usa `section.section` (e não `.section`) para os
+  wrappers vazios não criarem buracos na página.
 - Nenhuma entidade HTML (`&nbsp;`) no XML; tags vazias auto-fechadas (`<br/>`).
 - Domínio canónico/OG já é `https://valorfacil.blogspot.com/` (em `src/` via
   constante; no tema via `data:blog.canonicalUrl`, dinâmico). Os caminhos

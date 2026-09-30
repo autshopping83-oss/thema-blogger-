@@ -196,7 +196,9 @@ b {
 }
 
 /* Secções ----------------------------------------------------------------- */
-.section {
+/* Só <section class="section">: os wrappers de <b:section> do Blogger são
+   <div class="... section"> e não devem herdar este espaçamento. */
+section.section {
   padding-block: var(--space-section);
 }
 

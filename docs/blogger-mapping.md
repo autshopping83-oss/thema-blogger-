@@ -10,8 +10,9 @@ o `<b:skin>`), mesmos breakpoints. Só muda de onde vêm os dados.
 | `.site-logo` (Header) | `b:section#site-branding` → `Header1` | `data:title`, `data:imageUrl` |
 | `.nav-list` | `b:section#nav` → `PageList1` | páginas do Blogger |
 | `.ad-slot` topo | `b:section#ad-top` → `HTML10` | widget HTML (manual) |
+| hero (homepage) | `b:section#featured` → `FeaturedPost1` | `data:posts` (post mais recente) |
 | `.ad-slot` pós-hero | `b:section#ad-after-featured` → `HTML11` | widget HTML (manual) |
-| hero + recentes | `Blog1` (`isHomepage`) | `data:posts`, `data:post.snippets.short` |
+| recentes (homepage) | `Blog1` (`isHomepage`, `i > 0`) | `data:posts`, `data:post.snippets.short` |
 | categoria/arquivo/pesquisa | `Blog1` (`isMultipleItems`) | `data:posts` + `data:view.title` |
 | post individual | `Blog1` (único) | `data:post.body`, `data:post.labels` |
 | paginação | includable `pagination` | `newerPageUrl`, `olderPageUrl` |
