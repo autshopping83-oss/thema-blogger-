@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "blogger": {
+      "type": "local",
+      "command": ["npx", "-y", "@dalcontak/blogger-mcp-server"],
+      "enabled": true,
+      "environment": {
+        "GOOGLE_CLIENT_ID": "{env:GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "{env:GOOGLE_CLIENT_SECRET}",
+        "GOOGLE_REFRESH_TOKEN": "{env:GOOGLE_REFRESH_TOKEN}",
+        "BLOGGER_ID": "{env:BLOGGER_ID}",
+        "MCP_MODE": "stdio",
+        "BLOGGER_MAX_RESULTS": "20",
+        "LOG_LEVEL": "info"
+      }
+    }
+  }
+}

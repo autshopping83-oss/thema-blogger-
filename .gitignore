@@ -1,0 +1,11 @@
+.env
+.env.*
+*.secret
+credentials.json
+client_secret.json
+token.json
+tokens.json
+
+# nunca versionar credenciais Google
+*blogger*env
+!*.env.example
