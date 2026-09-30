@@ -31,9 +31,17 @@ Se o `blogId` não estiver confirmado, pergunta antes de executar qualquer escri
 
 ## Tema
 
-O tema vive em `theme/theme.xml` e é versionado no Git. O MCP **não** é usado
+O tema vive em `blogger/theme.xml` e é versionado no Git. O MCP **não** é usado
 para trocar o template Blogger — tema é desenvolvido em Git + XML e aplicado
-manualmente no Blogger.
+manualmente no Blogger (Blogger → Tema → ← Voltar/Restaurar).
+
+## Fases
+
+- **FASE 1 (concluída):** frontend local + `blogger/theme.xml`, sem qualquer
+  contacto com a conta Blogger, API, OAuth ou MCP. No fim: parar e entregar
+  relatório — não iniciar a FASE 2 sem pedido explícito.
+- **FASE 2:** descoberta do `blogId`, publicação de conteúdo.
+- **FASE 3:** Google Cloud OAuth + Blogger MCP + `opencode mcp list`.
 
 ## Segredos
 
