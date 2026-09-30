@@ -1,0 +1,244 @@
+/* ==========================================================================
+   Responsividade — apenas 4 breakpoints oficiais:
+
+     1. @media (max-width: 767px)                            mobile
+     2. @media (min-width: 768px)  and (max-width: 1023px)   tablet
+     3. @media (min-width: 1024px) and (max-width: 1279px)   desktop
+     4. @media (min-width: 1280px)                           large desktop
+
+   As regras partilhadas do desktop (3 + 4) são expressas com
+   min-width: 1024px, que cobre exatamente 1024 / 1280 / 1366 / 1440 / 1920.
+   Sem media queries por dispositivo.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- MOBILE */
+@media (max-width: 767px) {
+  .newsletter {
+    padding: var(--space-lg);
+  }
+
+  .card--row {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .footer-grid {
+    padding-block: 40px;
+  }
+
+  .widget {
+    padding: var(--space-md);
+  }
+
+  .calc-panel {
+    padding: var(--space-md);
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    row-gap: var(--space-xs);
+  }
+}
+
+/* --------------------------------------------------------------- TABLET */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: min(var(--container-width), calc(100% - 40px));
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .card-grid--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .category-split {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .calc-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .calc-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .calc-arrow {
+    align-self: center;
+  }
+
+  .calc-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .newsletter {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+    align-items: center;
+    padding: var(--space-xl);
+  }
+
+  .newsletter-form {
+    flex-direction: row;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: 56px;
+  }
+}
+
+/* -------------------------------------------------------------- DESKTOP */
+@media (min-width: 1024px) {
+  .container {
+    width: min(var(--container-width), calc(100% - 40px));
+  }
+
+  /* Navegação passa a inline (drawer fica só para mobile/tablet) --------- */
+  .main-nav {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+    transform: none;
+    visibility: visible;
+    transition: none;
+  }
+
+  .nav-list {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .nav-link {
+    padding: 0 2px;
+  }
+
+  .nav-link:hover {
+    background: none;
+  }
+
+  .nav-link.is-active::after {
+    left: 2px;
+    right: 2px;
+    bottom: 12px;
+  }
+
+  .menu-toggle,
+  .nav-backdrop {
+    display: none;
+  }
+
+  .header-inner {
+    gap: var(--space-xl);
+  }
+
+  /* Hero 55/45 ---------------------------------------------------------- */
+  .hero-grid {
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+    gap: 28px;
+    align-items: center;
+  }
+
+  /* Grelhas ------------------------------------------------------------ */
+  .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .card-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .card-grid--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .category-split {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: var(--space-lg);
+  }
+
+  /* Conteúdo + sidebar 300px ------------------------------------------- */
+  .main-layout {
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-width);
+    gap: var(--space-2xl);
+  }
+
+  .calc-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .calc-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .calc-arrow {
+    align-self: center;
+  }
+
+  .calc-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .newsletter {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+    align-items: center;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2xl);
+    padding-block: 56px;
+  }
+
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* -------------------------------------------------------- LARGE DESKTOP */
+@media (min-width: 1280px) {
+  .container {
+    width: min(var(--container-width), calc(100% - 40px));
+  }
+
+  .hero-grid {
+    gap: var(--space-xl);
+  }
+
+  .card-grid {
+    gap: var(--space-lg);
+  }
+
+  .card-grid--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calc-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    padding-block: 64px;
+  }
+}
