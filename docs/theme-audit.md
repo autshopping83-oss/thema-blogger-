@@ -241,21 +241,52 @@ Tema no ar: commit `af9b0e9` (main = development).
 | Sidebar | home: `display:none`, 0px; etiqueta e arquivo mensal: `flex`, 300px — 5 widgets nativos sempre no DOM |
 | Secções | `site-branding, nav, ad-top, featured, ad-after-featured, main, sidebar, footer-widgets` |
 | canonical / JSON-LD | home `WebSite`; etiqueta/mês `CollectionPage`+`BreadcrumbList`; `og:url` = URL canónica em cada página |
-| 404 `/p/sobre.html`, `/p/privacidade.html`, `/p/termos.html` | **conteúdo pendente (FASE 2b)** — páginas institucionais por criar; não é bug do tema. Tratar **antes** de qualquer publicação definitiva |
+| 404 `/p/sobre.html`, `/p/privacidade.html`, `/p/termos.html` | **conteúdo pendente (FASE 2b)** — páginas institucionais por criar; não é bug do tema. Tratar **antes** de qualquer publicação definitiva → resolvido em §10 |
 | Sem posts | destaque/recentes vazios por desenho — FASE 2b |
 
 Ordem decidida para a frente: **tema (feito) → páginas institucionais →
 menu → conteúdo inicial → SEO → monetização.**
 
+## 10. FASE 2b — páginas institucionais e menu (2026-09-30)
 
-## 10. Estado
+**Bloqueio resolvido no caminho:** as páginas criadas respondiam 200 mas
+saíam vazias — `<!--Can't find substitution for tag [post.title]-->`. Causa
+corrigida em `85d60d9` (ramo de item único do `Blog1` sem
+`<b:loop values='data:posts' var='post'>`), com a **verificação 8** nova no
+validador (`data:post.*` tem de estar dentro de `b:loop var=post`) para não
+regredir.
+
+| Página | URL | h1 no ar | corpo | axe-core | JSON-LD |
+|---|---|---|---|---|---|
+| Sobre | `/p/sobre.html` | `Sobre` ✅ | 2 095 chars ✅ | **0 violações** | `WebPage`+`BreadcrumbList` |
+| Privacidade | `/p/privacidade.html` | `Privacidade` ✅ | 2 785 chars ✅ | **0 violações** | `WebPage`+`BreadcrumbList` |
+| Termos de uso | `/p/termos.html` | `Termos de uso` ✅ | 2 547 chars ✅ | **0 violações** | `WebPage`+`BreadcrumbList` |
+
+- **Rodapé (Legal):** os três links do tema respondem **200**.
+- **Menu principal (`PageList1`):** `Página inicial`, `Sobre`, `Privacidade`,
+  `Termos de uso` — os quatro **200**. O link da homepage é servido em
+  `http://` e redireciona **301 → https** (sem efeito prático; vem da
+  configuração do widget).
+- **Rede/JS:** 0 pedidos falhados, 0 erros de consola, 0 overflow em 1440px.
+- **Origem dos textos:** `content/paginas/*.html` (commit `7ea6583`),
+  colados manualmente no editor de páginas do Blogger pelo utilizador.
+- **Nota inofensiva:** a plataforma injeta em todas as páginas
+  `<!--Can't find substitution for tag [blog.ieCssRetrofitLinks]-->`
+  (não vem do nosso tema; comentário invisível, sem efeito em axe/SEO).
+
+**Ainda pendente (conteúdo, não tema):** posts em artigo
+(home continua sem `h1` → axe `page-has-heading-one`), conteúdo inicial,
+SEO e monetização.
+
+## 11. Estado
 
 - FASE 1: **concluída** (frontend + tema, testes e docs versionados).
 - FASE 2: auditoria **concluída**; correções §7.1–§7.4 aplicadas; tema
   **instalado manualmente** pelo utilizador e **verificado ao vivo** (§9.1,
-  commit `af9b0e9`) — gate de §8 concluído, com a ressalva do backup (§8).
-- FASE 2b (pendente): páginas institucionais `/p/sobre`, `/p/privacidade`,
-  `/p/termos` (404), ligação ao menu/footer, conteúdo inicial, SEO.
+  commit `af9b0e9`) — gate de §8 concluído, com a ressalva do backup (§8);
+  bug do ramo único corrigido em `85d60d9`.
+- FASE 2b: **páginas institucionais e menu concluídos** (§10). Pendente:
+  conteúdo inicial (posts), SEO, monetização.
 - FASE 3 (pendente): OAuth + MCP.
-- Conta Blogger, MCP e OAuth: **intocados pelo agente** (instalação e
-  conteúdo são manuais, do utilizador).
+- Conta Blogger, MCP e OAuth: **intocados pelo agente** — instalação,
+  páginas e menu foram manuais, do utilizador.
