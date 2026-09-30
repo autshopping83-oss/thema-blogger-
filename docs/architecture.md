@@ -65,8 +65,10 @@ Sem dependências; progressive enhancement — as páginas funcionam sem JS.
 ## SEO e acessibilidade
 
 - Um único `h1` por página; hierarquia `h2 → h3` sem saltos.
-- `meta description`, canonical, Open Graph e JSON-LD (Article, Breadcrumb,
-  FAQPage) — URLs com placeholder `https://fluxodevalor.example/`.
+- `meta description`, canonical, Open Graph/Twitter e JSON-LD (Article,
+  Breadcrumb, FAQPage) sobre `https://valorfacil.blogspot.com/` — os
+  caminhos (`/article.html`, `/category.html`) são os do preview local e
+  passam a permalinks reais no deploy.
 - Landmarks: `header`/`nav`/`main`/`aside`/`footer`, skip-link, foco visível.
 - Alvos ≥ 44px (`--target-min`), contraste AA verificado com axe-core.
 

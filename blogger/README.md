@@ -53,7 +53,9 @@ Desenvolvido em Git; aplicado manualmente no Blogger.
 - `b:section` de anúncios vive dentro de `b:if` (homepage). Se o Blogger
   rejeitar, mover a seção para fora do condicional e esconder com CSS.
 - Nenhuma entidade HTML (`&nbsp;`) no XML; tags vazias auto-fechadas (`<br/>`).
-- Placeholder `https://fluxodevalor.example/` em canonical/OG deve passar a
-  `https://valorfacil.blogspot.com/` antes do deploy.
+- Domínio canónico/OG já é `https://valorfacil.blogspot.com/` (em `src/` via
+  constante; no tema via `data:blog.canonicalUrl`, dinâmico). Os caminhos
+  (`/article.html`, `/category.html`) são os do preview local e passam a
+  permalinks reais no deploy.
 - `data:post.snippets.short` depende de o post ter resumo (Blogger → definições
   de post: "descrição manual" ou primeira linha).

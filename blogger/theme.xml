@@ -15,6 +15,28 @@
   </b:if>
   <link expr:href='data:blog.canonicalUrl' rel='canonical'/>
 
+  <b:if cond='data:blog.pageType == &quot;item&quot;'>
+    <meta content='article' property='og:type'/>
+    <b:else/>
+    <meta content='website' property='og:type'/>
+  </b:if>
+  <meta expr:content='data:blog.canonicalUrl' property='og:url'/>
+  <meta expr:content='data:blog.title' property='og:site_name'/>
+  <b:if cond='data:blog.pageName'>
+    <meta expr:content='data:blog.pageName' property='og:title'/>
+    <b:else/>
+    <meta expr:content='data:blog.title' property='og:title'/>
+  </b:if>
+  <b:if cond='data:blog.metaDescription'>
+    <meta expr:content='data:blog.metaDescription' property='og:description'/>
+    <meta expr:content='data:blog.metaDescription' name='twitter:description'/>
+  </b:if>
+  <meta content='summary_large_image' name='twitter:card'/>
+  <b:if cond='data:blog.postImageUrl'>
+    <meta expr:content='data:blog.postImageUrl' property='og:image'/>
+    <meta expr:content='data:blog.postImageUrl' name='twitter:image'/>
+  </b:if>
+
   <!-- ==========================================================
        DESIGN SYSTEM — espelho de src/css/*.css (versão Blogger)
        Mantido em Git em theme/ e sincronizado manualmente.
