@@ -238,6 +238,7 @@ section.section{padding-block:var(--space-section)}
   padding-block:var(--space-section)}
 .main-content{min-width:0}
 .sidebar{display:flex;flex-direction:column;gap:var(--space-xl);min-width:0}
+.container:not(.main-layout) > .sidebar{display:none}
 .widget{padding:var(--space-lg);background:var(--color-background);border:1px solid var(--color-border);
   border-radius:var(--radius-md)}
 .widget--plain{padding:0;border:0}
@@ -384,7 +385,7 @@ section.section{padding-block:var(--space-section)}
 <header class='site-header'>
   <div class='container header-inner'>
 
-    <b:section class='site-branding' id='site-branding' maxwidgets='1' showaddelement='no'>
+    <b:section class='site-branding header' id='site-branding' maxwidgets='1' showaddelement='no'>
       <b:widget id='Header1' locked='true' title='Fluxo de Valor' type='Header' version='2'>
         <b:includable id='main'>
           <a class='site-logo' expr:href='data:blog.homepageUrl'>
@@ -399,7 +400,7 @@ section.section{padding-block:var(--space-section)}
     </b:section>
 
     <nav class='main-nav' id='main-nav' aria-label='Navegação principal'>
-      <b:section class='nav-section' id='nav' maxwidgets='1' showaddelement='no'>
+      <b:section class='nav-section navbar' id='nav' maxwidgets='1' showaddelement='no'>
         <b:widget id='PageList1' locked='false' title='Menu principal' type='PageList' version='2'>
           <b:includable id='main'>
             <ul class='nav-list'>
@@ -435,7 +436,11 @@ section.section{padding-block:var(--space-section)}
   </b:section>
 </div>
 
-<div class='container main-layout'>
+<div class='container'>
+  <!-- Sidebar só em etiqueta/arquivo (igual ao src/). A <b:section> fica
+       sempre no markup (não pode viver dentro de <b:if>); o que muda é a
+       classe do contentor e o CSS esconde o <aside> nas outras páginas. -->
+  <b:class cond='data:view.isLabelSearch or data:view.isArchive' name='main-layout'/>
   <main class='main-content' id='conteudo'>
 
     <!-- HERO — secção de topo, fora de <b:if> e fora de <b:widget> -->
@@ -490,7 +495,7 @@ section.section{padding-block:var(--space-section)}
       </b:widget>
     </b:section>
 
-    <b:section class='main-section' id='main' showaddelement='no'>
+    <b:section class='main-section main' id='main' showaddelement='no'>
       <b:widget id='Blog1' locked='true' title='Artigos' type='Blog' version='2'>
         <b:includable id='main'>
 
@@ -607,7 +612,7 @@ section.section{padding-block:var(--space-section)}
   "headline": "<data:post.title.jsonEscaped/>",
   "description": "<data:post.snippets.short.jsonEscaped/>",
   "datePublished": "<data:post.date.iso8601.jsonEscaped/>",
-  "dateModified": "<data:post.lastUpdated.iso8601.jsonEscaped/>",
+  "dateModified": "<data:post.date.iso8601.jsonEscaped/>",
   "author": {"@type": "Person", "name": "<data:post.author.name.jsonEscaped/>", "url": "<data:post.author.profileUrl.jsonEscaped/>"},
   "publisher": {"@type": "Organization", "name": "<data:blog.title.jsonEscaped/>"}<b:if cond='data:post.featuredImage'>,
   "image": {"@type": "ImageObject", "url": "<b:eval expr='resizeImage(data:post.featuredImage, 1200, &quot;1200:630&quot;)'/>", "width": 1200, "height": 630}</b:if>
@@ -640,7 +645,7 @@ section.section{padding-block:var(--space-section)}
   </main>
 
   <aside class='sidebar' aria-label='Barra lateral'>
-    <b:section class='sidebar-section' id='sidebar' showaddelement='yes'>
+    <b:section class='sidebar-section sidebar' id='sidebar' showaddelement='yes'>
 
       <b:widget id='BlogSearch1' locked='false' title='Pesquisar' type='BlogSearch' version='2'>
         <b:includable id='main'>
@@ -665,7 +670,7 @@ section.section{padding-block:var(--space-section)}
                   </b:if>
                 </span>
                 <span>
-                  <span class='recent-title'><a expr:href='data:post.href'><data:post.title/></a></span>
+                  <span class='recent-title'><a expr:href='data:post.url'><data:post.title/></a></span>
                   <span class='recent-meta'><data:post.date/></span>
                 </span>
               </li>
@@ -727,7 +732,7 @@ section.section{padding-block:var(--space-section)}
         </ul>
       </nav>
 
-      <b:section class='footer-section' id='footer-widgets' maxwidgets='2' showaddelement='yes'>
+      <b:section class='footer-section footer' id='footer-widgets' maxwidgets='2' showaddelement='yes'>
         <b:widget id='HTML30' locked='false' title='Categorias' type='HTML' version='2'>
           <b:includable id='main'>
             <p class='footer-title'><data:title/></p>

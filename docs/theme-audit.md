@@ -101,14 +101,14 @@ Confiança = probabilidade de o tema guardar e renderizar sem erro.
 | `data:blog.canonicalHomepageUrl` | JSON-LD | **Alta** | runtime + tema real (jettheme) | manter |
 | `data:post.date.iso8601` + `.jsonEscaped` | Article | **Alta** | snippets `blog-posts-gadget-v2` + exemplos reais | manter |
 | `data:post.snippets.short` | hero/cards/Article | Média | documentado para Blog/FeaturedPost v2 | manter; se falhar, `data:post.body snippet` |
-| `data:post.lastUpdated.iso8601` | `dateModified` | Média | exemplo real; fallback `data:post.lastUpdatedISO8601` | **trocar na dúvida** |
+| ~~`data:post.lastUpdated.iso8601`~~ → `data:post.date.iso8601` | `dateModified` | Alta (aplicado) | campo já usado em `datePublished` | **resolvido (§7.4)** |
 | `data:imageUrl` (Header v2) | logo | Média | guardado por `<b:if cond='data:imageUrl'>` | confirmar no Layout |
-| **`data:post.href`** | `PopularPosts1` recentes | **Baixa (risco alto)** | em PopularPosts/FeaturedPost o campo documentado é `data:post.url` | **corrigir → `data:post.url`** |
+| ~~`data:post.href`~~ → `data:post.url` | `PopularPosts1` recentes | Alta (aplicado) | campo documentado para PopularPosts/FeaturedPost | **resolvido (§7.2)** |
 | `FeaturedPost1` + `widget-settings` | hero | Média | nomes vindos de dump real | validar no 1º upload |
 | `resizeImage(img, 1200, "1200:630")` | Article | Alta | API standard do tema | manter |
 | `b:class cond='…'` | layout | Alta | documentado | manter |
 | ids de secção com hífen (`ad-after-featured`…) | 4 secções | Alta | "letras e números" nas docs, mas temas reais usam hífen e o editor aceita | manter; renomear só se o save falhar |
-| `class` convencionais ausentes (`header`/`main`/`sidebar`/`footer`) | 5 secções | — | não quebra o render; só afeta migração futura | correção aditiva pendente |
+| ~~`class` convencionais ausentes~~ | 5 secções | Alta (aplicado) | `header`/`navbar`/`main`/`sidebar`/`footer` acrescentadas | **resolvido (§7.3)** |
 
 ## 6. Divergência `src/` ↔ tema: a sidebar
 
@@ -155,7 +155,7 @@ alternativa seria duplicar o markup ou mover a secção, ambas piores.
 duplicar o `<aside>` por página (manutenção dupla) · manter a sidebar em todo
 o lado (diverge do `src/` e aperta o artigo para <700px).
 
-## 7. Correções pendentes (aguardam aprovação — nada aplicado)
+## 7. Correções — aplicadas nesta iteração (local; nada no Blogger)
 
 | # | Correção | Tipo | Risco | Esforço |
 |---|----------|------|-------|---------|
@@ -165,8 +165,34 @@ o lado (diverge do `src/` e aperta o artigo para <700px).
 | 4 | `dateModified`: `lastUpdated.iso8601` → fallback `lastUpdatedISO8601` (ou `date.iso8601` como último recurso) | data tag | médio | 1 linha |
 | 5 | *(opcional)* ids de secção sem hífen | estrutural | baixa | renomear 4 ids |
 
-Recomendação: aplicar **2 → 1 → 3 → 4** e repetir a auditoria; a 5 só se o
-editor acusar erro no save.
+Aplicadas por esta ordem, todas só em `src/` + `blogger/theme.xml`:
+
+1. ✅ **2** — `data:post.href` → `data:post.url` (`PopularPosts1`).
+2. ✅ **1** — sidebar condicional: `<b:class cond='data:view.isLabelSearch or
+   data:view.isArchive' name='main-layout'/>` + `.container:not(.main-layout) > .sidebar{display:none}`
+   (skin **e** `src/css/sidebar.css`). A `<b:section id='sidebar'>` mantém-se
+   sempre no markup com os 5 widgets nativos (`BlogSearch1`, `PopularPosts1`,
+   `Label1`, `HTML20`, `HTML21`) — não foi transformada em markup fixo.
+3. ✅ **3** — classes de migração `header`/`navbar`/`main`/`sidebar`/`footer`.
+4. ✅ **4** — `dateModified` passa a `data:post.date.iso8601` (campo
+   confirmado; a regressão era arriscar o save do tema). *Nota:* para posts
+   editados depois de publicados, `dateModified` fica igual a `datePublished` —
+   trocar por `lastUpdated` só depois de confirmado no Blogger.
+
+A 5 (ids sem hífen) mantém-se opcional — só se o editor acusar erro no save.
+
+**Verificação após aplicar** (`validate-theme.py` → 0 erros, **5 avisos**,
+antes 12):
+
+| Pedido | Resultado |
+|---|---|
+| XML bem formado | ✅ |
+| Validação estrutural | ✅ secções de topo, ordem `featured → ad-after-featured → main` |
+| Teste das 5 páginas / 10 breakpoints | ✅ `node test.js` — todos |
+| canonical/OG/JSON-LD | ✅ 4 canonical + 4 `og:url` em `src/`; 7 blocos JSON-LD válidos no tema |
+| `AD_AFTER_FEATURED` no lugar | ✅ entre hero e recentes; ausente fora da homepage |
+| Screenshots antes/depois (home, artigo, categoria, 360/1440) | ✅ **6/6 byte a byte idênticos** |
+| Sidebar em widgets nativos | ✅ `sidebar-rule.test.js`: 5 widgets, `display:none` sem `main-layout`, `flex` com ele (`preview/sidebar-sem-layout.png`) |
 
 ## 8. Checklist pré-instalação (gate)
 
@@ -199,6 +225,6 @@ Princípios: **tema de backup primeiro, cópia de teste, zero conteúdo novo.**
 ## 10. Estado
 
 - FASE 1: **concluída** (frontend + tema, testes e docs versionados).
-- FASE 2 (esta): auditoria **concluída**; 4 correções pendentes (§7);
-  instalação **não executada**.
+- FASE 2 (esta): auditoria **concluída**; correções §7.1–§7.4 **aplicadas e
+  verificadas**; instalação **não executada** (falta o gate de §8).
 - Conta Blogger, MCP e OAuth: **intocados**.

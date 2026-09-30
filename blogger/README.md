@@ -80,7 +80,7 @@ Tudo dinâmico, a partir de `data:*` do próprio Blogger — nenhum valor fixo:
 | Homepage | `WebSite` + `SearchAction` | `data:blog.title`, `data:blog.homepageUrl` |
 | Categoria/arquivo/pesquisa | `CollectionPage` + `BreadcrumbList` | `data:view.title`, `data:blog.canonicalUrl` |
 | Página estática | `WebPage` + `BreadcrumbList` | `data:view.title` |
-| Artigo (`data:view.isPost`) | `Article` + `BreadcrumbList` | `data:post.title`, `.snippets.short`, `.date.iso8601`, `.lastUpdated.iso8601`, `.author`, `.labels` |
+| Artigo (`data:view.isPost`) | `Article` + `BreadcrumbList` | `data:post.title`, `.snippets.short`, `.date.iso8601` (`datePublished` e `dateModified`), `.author`, `.labels` |
 | Artigo com FAQ visível | `FAQPage` | lido do DOM pelo script do tema |
 
 - `FAQPage` **nunca** é emitida como bloco fixo: o script varre

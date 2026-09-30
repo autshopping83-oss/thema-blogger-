@@ -32,7 +32,8 @@ projects/fluxo-de-valor-blog/
 | Categoria | `category.html` | `page-header` + grelha de cards + `.main-layout` com sidebar |
 | Pesquisa | `search.html` | campo, contagem, resultados, estado vazio |
 
-`category.html` e `search.html` partilham o `main-layout` (70/30 → 280px sidebar).
+Só `category.html` usa `.main-layout` (70/30 → 280px sidebar, com widgets
+nativos do Blogger). `search.html` fica a uma coluna, sem sidebar.
 
 ## Sistema responsivo
 

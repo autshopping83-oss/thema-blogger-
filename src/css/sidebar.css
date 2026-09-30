@@ -18,6 +18,12 @@
   min-width: 0;
 }
 
+/* Sem .main-layout (home, artigo, pesquisa) a sidebar não aparece.
+   Mesma regra do blogger/theme.xml — no src nunca chega a aplicar-se. */
+.container:not(.main-layout) > .sidebar {
+  display: none;
+}
+
 .widget {
   padding: var(--space-lg);
   background: var(--color-background);
