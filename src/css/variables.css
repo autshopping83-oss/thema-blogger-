@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Design tokens — Fluxo de Valor
+   Todos os valores arbitrários do CSS vivem aqui.
+   Breakpoints oficiais: 767 / 1023 / 1279 / 1280+
+   ========================================================================== */
+
+:root {
+  /* Cores ---------------------------------------------------------------- */
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-soft: #EFF6FF;
+
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-strong: #4B5563;
+  --color-text-muted: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+
+  --color-background: #FFFFFF;
+  --color-surface: #F8FAFC;
+  --color-border: #E5E7EB;
+
+  --color-success: #16A34A;
+  --color-danger: #DC2626;
+
+  --color-footer-bg: #0F172A;
+  --color-footer-heading: #FFFFFF;
+  --color-footer-text: #CBD5E1;
+  --color-footer-muted: #94A3B8;
+
+  /* Tipografia (mobile-first; refinada por breakpoint) ------------------- */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+
+  --text-h1: 30px;
+  --text-h2: 22px;
+  --text-h3: 18px;
+  --text-body: 16px;
+  --text-card-title: 17px;
+  --text-card-summary: 14px;
+  --text-meta: 12px;
+  --text-nav: 15px;
+  --text-small: 13px;
+
+  --leading-tight: 1.15;
+  --leading-heading: 1.25;
+  --leading-body: 1.7;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Layout --------------------------------------------------------------- */
+  --container-width: 1180px;
+  --container-gutter: 32px; /* mobile: 16px por lado */
+  --article-width: 730px;
+  --sidebar-width: 300px;
+  --header-height: 60px;
+  --hero-image-share: 55%;
+
+  /* Espaçamento ---------------------------------------------------------- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;
+  --space-section: 40px;
+
+  /* Raios ---------------------------------------------------------------- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Superfícies ---------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 8px 24px rgba(17, 24, 39, 0.08);
+
+  /* Movimento ------------------------------------------------------------ */
+  --transition-fast: 150ms ease;
+  --transition: 220ms ease;
+
+  /* Hierarquia ----------------------------------------------------------- */
+  --z-header: 100;
+  --z-drawer: 200;
+
+  /* Acessibilidade ------------------------------------------------------- */
+  --target-min: 44px;
+}
+
+/* Tablet ------------------------------------------------------------------ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --text-h1: 38px;
+    --text-h2: 26px;
+    --text-h3: 20px;
+    --text-body: 17px;
+    --text-card-title: 18px;
+    --text-card-summary: 15px;
+    --header-height: 64px;
+    --space-section: 48px;
+    --container-gutter: 40px;
+  }
+}
+
+/* Desktop ----------------------------------------------------------------- */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :root {
+    --text-h1: 46px;
+    --text-h2: 30px;
+    --text-h3: 22px;
+    --text-body: 18px;
+    --text-card-title: 20px;
+    --text-card-summary: 15px;
+    --text-meta: 13px;
+    --header-height: 68px;
+    --space-section: 56px;
+    --container-gutter: 40px;
+  }
+}
+
+/* Large desktop ----------------------------------------------------------- */
+@media (min-width: 1280px) {
+  :root {
+    --text-h1: 50px;
+    --text-h2: 32px;
+    --text-h3: 24px;
+    --text-body: 18px;
+    --text-card-title: 21px;
+    --text-card-summary: 16px;
+    --text-meta: 13px;
+    --header-height: 68px;
+    --space-section: 64px;
+    --container-width: 1200px;
+    --container-gutter: 40px;
+  }
+}
