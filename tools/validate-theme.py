@@ -344,6 +344,28 @@ for t, (lvl, note) in KNOWN_RISK.items():
     else:
         print('[ok] risco conhecido ja resolvido: %s' % t)
 
+# 8. data:post.* so tem significado dentro de <b:loop ... var='post'>
+#    (sem o loop o Blogger serve "Can't find substitution for tag [post.x]")
+body = _re.sub(r'<!--.*?-->', '', raw, flags=_re.S)
+toks = _re.compile(r"</?b:loop\b[^>]*>|data:post\.")
+stack, bad_scope = [], []
+for m in toks.finditer(body):
+    tok = m.group(0)
+    if tok.startswith('</b:loop'):
+        if stack:
+            stack.pop()
+    elif tok.startswith('<b:loop'):
+        var = _re.search(r"\bvar='([^']+)'", tok)
+        stack.append(var.group(1) if var else '?')
+    elif 'post' not in stack:
+        lineno = body[:m.start()].count('\n') + 1
+        bad_scope.append('linha %d: %s' % (lineno, body[m.start():m.start() + 40].split("'")[0]))
+if bad_scope:
+    for b in bad_scope[:5]:
+        errs.append('data:post fora de b:loop var=post — %s' % b)
+else:
+    print('[ok] todas as data:post.* estao dentro de b:loop var=post')
+
 print()
 if errs:
     print('ERROS DE AUDITORIA:')

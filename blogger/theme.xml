@@ -561,71 +561,73 @@ section.section{padding-block:var(--space-section)}
             <b:include name='pagination'/>
 
           <b:else/>
-            <!-- POST INDIVIDUAL -->
-            <nav class='breadcrumb' aria-label='Trilha de navegação'>
-              <ol>
-                <li><a expr:href='data:blog.homepageUrl'>Início</a></li>
+            <!-- POST INDIVIDUAL — data:post.* so esta definido dentro do loop de data:posts -->
+            <b:loop values='data:posts' var='post'>
+              <nav class='breadcrumb' aria-label='Trilha de navegação'>
+                <ol>
+                  <li><a expr:href='data:blog.homepageUrl'>Início</a></li>
+                  <b:loop index='i' values='data:post.labels' var='label'>
+                    <b:if cond='data:i == 0'>
+                      <li><a expr:href='data:label.url'><data:label.name/></a></li>
+                    </b:if>
+                  </b:loop>
+                  <li aria-current='page'><data:post.title/></li>
+                </ol>
+              </nav>
+
+              <article>
+                <header class='article-header'>
+                  <b:loop values='data:post.labels' var='label'>
+                    <a class='eyebrow' expr:href='data:label.url'><data:label.name/></a>
+                  </b:loop>
+                  <h1 class='article-title'><data:post.title/></h1>
+                  <p class='article-summary'><data:post.snippets.short/></p>
+                  <p class='meta meta--dot'><span><data:post.author.name/></span><data:post.date/></p>
+                </header>
+
+                <b:if cond='data:post.featuredImage'>
+                  <figure class='article-figure'>
+                    <img expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 960, &quot;16:9&quot;)' height='540' width='960'/>
+                  </figure>
+                </b:if>
+
+                <div class='article-body'>
+                  <data:post.body/>
+                </div>
+              </article>
+
+              <p class='meta labels-bar'>
                 <b:loop index='i' values='data:post.labels' var='label'>
-                  <b:if cond='data:i == 0'>
-                    <li><a expr:href='data:label.url'><data:label.name/></a></li>
-                  </b:if>
+                  <b:if cond='data:i &gt; 0'> · </b:if>
+                  <a expr:href='data:label.url'><data:label.name/></a>
                 </b:loop>
-                <li aria-current='page'><data:post.title/></li>
-              </ol>
-            </nav>
+              </p>
 
-            <article>
-              <header class='article-header'>
-                <b:loop values='data:post.labels' var='label'>
-                  <a class='eyebrow' expr:href='data:label.url'><data:label.name/></a>
-                </b:loop>
-                <h1 class='article-title'><data:post.title/></h1>
-                <p class='article-summary'><data:post.snippets.short/></p>
-                <p class='meta meta--dot'><span><data:post.author.name/></span><data:post.date/></p>
-              </header>
-
-              <b:if cond='data:post.featuredImage'>
-                <figure class='article-figure'>
-                  <img expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 960, &quot;16:9&quot;)' height='540' width='960'/>
-                </figure>
+              <!-- JSON-LD do artigo — só para posts reais, com dados do post -->
+              <b:if cond='data:view.isPost'>
+                <script type='application/ld+json'>
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "<data:post.url.canonical.jsonEscaped/>"},
+    "headline": "<data:post.title.jsonEscaped/>",
+    "description": "<data:post.snippets.short.jsonEscaped/>",
+    "datePublished": "<data:post.date.iso8601.jsonEscaped/>",
+    "dateModified": "<data:post.date.iso8601.jsonEscaped/>",
+    "author": {"@type": "Person", "name": "<data:post.author.name.jsonEscaped/>", "url": "<data:post.author.profileUrl.jsonEscaped/>"},
+    "publisher": {"@type": "Organization", "name": "<data:blog.title.jsonEscaped/>"}<b:if cond='data:post.featuredImage'>,
+    "image": {"@type": "ImageObject", "url": "<b:eval expr='resizeImage(data:post.featuredImage, 1200, &quot;1200:630&quot;)'/>", "width": 1200, "height": 630}</b:if>
+  }
+                </script>
+                <script type='application/ld+json'>
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Início", "item": "<data:blog.homepageUrl/>"}
+    <b:loop index='i' values='data:post.labels' var='label'><b:if cond='data:i == 0'>,{"@type": "ListItem", "position": 2, "name": "<data:label.name.jsonEscaped/>", "item": "<data:label.url.jsonEscaped/>"}</b:if></b:loop>
+    ,{"@type": "ListItem", "position": <b:if cond='data:post.labels'>3<b:else/>2</b:if>, "name": "<data:post.title.jsonEscaped/>", "item": "<data:post.url.canonical.jsonEscaped/>"}
+  ]}
+                </script>
               </b:if>
-
-              <div class='article-body'>
-                <data:post.body/>
-              </div>
-            </article>
-
-            <p class='meta labels-bar'>
-              <b:loop index='i' values='data:post.labels' var='label'>
-                <b:if cond='data:i &gt; 0'> · </b:if>
-                <a expr:href='data:label.url'><data:label.name/></a>
-              </b:loop>
-            </p>
-
-            <!-- JSON-LD do artigo — só para posts reais, com dados do post -->
-            <b:if cond='data:view.isPost'>
-              <script type='application/ld+json'>
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "<data:post.url.canonical.jsonEscaped/>"},
-  "headline": "<data:post.title.jsonEscaped/>",
-  "description": "<data:post.snippets.short.jsonEscaped/>",
-  "datePublished": "<data:post.date.iso8601.jsonEscaped/>",
-  "dateModified": "<data:post.date.iso8601.jsonEscaped/>",
-  "author": {"@type": "Person", "name": "<data:post.author.name.jsonEscaped/>", "url": "<data:post.author.profileUrl.jsonEscaped/>"},
-  "publisher": {"@type": "Organization", "name": "<data:blog.title.jsonEscaped/>"}<b:if cond='data:post.featuredImage'>,
-  "image": {"@type": "ImageObject", "url": "<b:eval expr='resizeImage(data:post.featuredImage, 1200, &quot;1200:630&quot;)'/>", "width": 1200, "height": 630}</b:if>
-}
-              </script>
-              <script type='application/ld+json'>
-{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-  {"@type": "ListItem", "position": 1, "name": "Início", "item": "<data:blog.homepageUrl/>"}
-  <b:loop index='i' values='data:post.labels' var='label'><b:if cond='data:i == 0'>,{"@type": "ListItem", "position": 2, "name": "<data:label.name.jsonEscaped/>", "item": "<data:label.url.jsonEscaped/>"}</b:if></b:loop>
-  ,{"@type": "ListItem", "position": <b:if cond='data:post.labels'>3<b:else/>2</b:if>, "name": "<data:post.title.jsonEscaped/>", "item": "<data:post.url.canonical.jsonEscaped/>"}
-]}
-              </script>
-            </b:if>
+            </b:loop>
           </b:if>
         </b:includable>
 
